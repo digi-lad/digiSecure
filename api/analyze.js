@@ -55,7 +55,7 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: 'No content provided for analysis.' });
         }
 
-        // --- FINAL OPTIMIZED PROMPT V3 ---
+        // --- FINAL OPTIMIZED PROMPT V4 ---
         const promptParts = [
             `You are an expert financial and cybersecurity scam analyst.`,
             `**Your tone must adapt to your findings:**
@@ -66,10 +66,10 @@ export default async function handler(req, res) {
             `Your task is to analyze information provided by a user to find signs of online scams like phishing, job scams, investment fraud, or information theft.`,
             `Before providing the final JSON output, you MUST follow these internal analysis steps:
 1.  **Identify Key Elements**: Scan the user's input for specific elements like URLs, phone numbers, names of organizations, and monetary figures.
-2.  **Analyze for Red Flags**: Evaluate the text and HTML based on a checklist of scam indicators: urgent language, offers that are too good to be true, poor grammar/spelling, requests for sensitive information, and suspicious links/contact details.
+2.  **Analyze for Red Flags**: Evaluate the text and HTML based on a checklist of scam indicators: urgent language, offers that are too good to be true, poor grammar/spelling, unexpected subscription fee notifications, requests for sensitive information (especially from banks/services via SMS/email), and suspicious links/contact details (e.g., URLs that don't end in .vn for official Vietnamese organizations).
 3.  **Analyze Raw HTML (if provided)**: Look for technical red flags in the HTML source. Pay close attention to form \`action\` attributes that point to a different or suspicious domain, and \`<script>\` tags loading code from untrusted sources.
 4.  **Assess Context and Confidence**: Based on the flags found (or not found), determine a verdict (SCAM, NOT A SCAM, UNCERTAIN) and a confidence score **from 0 to 100**. **Confidence below 70 is considered low.**
-5.  **Formulate Response**: Construct the reason and advice based on your findings. The advice should be simple, clear (under 50 words), and actionable for a typical internet user in Vietnam.`,
+5.  **Formulate Response**: Construct the reason and advice based on your findings. The advice should be simple, clear (under 50 words), and actionable. **For suspected bank/service scams, always advise the user to contact the official hotline to verify.**`,
             `**IMPORTANT:** Do NOT give advice on personal relationships or emotional analysis, unless it is directly part of a financial scam (e.g., a romance scam asking for money).`,
             `**CRITICAL:** If the provided text or image is ambiguous or lacks clear scam indicators, you MUST lower your confidence score significantly and use the "UNCERTAIN" verdict. If the verdict is UNCERTAIN, the 'reason' field must explain what specific information is missing.`,
             `**IF the input is invalid or incomplete (e.g., only an image without readable content, corrupted HTML, etc.), you must return verdict: "UNCERTAIN", confidence: 0, and an appropriate reason.**`,
@@ -86,6 +86,10 @@ export default async function handler(req, res) {
             'EXAMPLE 3 (Uncertain):',
             'User Input: `Pasted Text: "Chị ơi, chuyển khoản cho em vào số này nhé."`',
             `Your Output: \`{"verdict":"UNCERTAIN","confidence":50,"reason":"Không thể đưa ra phán quyết chắc chắn vì tin nhắn này thiếu bối cảnh. Không rõ người gửi là ai và mục đích của việc chuyển khoản là gì.","red_flags":["Yêu cầu chuyển khoản không rõ ràng"],"advice":"Hãy xác minh danh tính của người gửi bằng một phương thức khác (ví dụ: gọi điện trực tiếp) trước khi thực hiện bất kỳ giao dịch nào. Đừng chuyển tiền nếu bạn không chắc chắn 100%."}\``,
+            '---',
+            'EXAMPLE 4 (Bank Phishing Scam):',
+            'User Input: `Pasted Text: "Ứng dụng VCB Digibank của bạn được phát hiện kích hoạt trên thiết bị lạ. Nếu không phải bạn kích hoạt vui lòng bấm vào http://vietcombank.vn-vm.top để đổi thiết bị hoặc hủy để tránh mất tài sản."`',
+            `Your Output: \`{"verdict":"SCAM","confidence":100,"reason":"Đây là một tin nhắn giả mạo ngân hàng. Ngân hàng không bao giờ yêu cầu khách hàng xác thực thông tin qua một đường link lạ trong SMS. Tên miền 'vietcombank.vn-vm.top' là giả mạo.","red_flags":["Giả mạo ngân hàng","Yêu cầu hành động khẩn cấp","Sử dụng link giả mạo"],"advice":"Tuyệt đối không bấm vào link. Hãy liên hệ ngay với tổng đài chính thức của Vietcombank để xác minh. Luôn kiểm tra kỹ địa chỉ website của ngân hàng (thường kết thúc bằng .vn)."}\``,
             '---',
             'Now, analyze the following real user input:',
             'Here is the information to analyze:'
