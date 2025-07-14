@@ -35,7 +35,7 @@
         <div class="w-full max-w-2xl mx-auto">
             <!-- Header Section -->
             <header class="text-center mb-8">
-                <h1 class="text-4xl sm:text-5xl font-bold text-white">Scam or not?</h1>
+                <h1 class="text-4xl sm:text-5xl font-bold text-white">Có phải lừa đảo không?</h1>
                 <p class="mt-3 text-lg text-gray-400">Để AI của chúng tôi phân tích tin nhắn, liên kết và ảnh chụp màn hình cho bạn.</p>
             </header>
 
@@ -236,6 +236,8 @@
                     verdictText = 'KHÔNG PHẢI LỪA ĐẢO';
                 }
 
+                // NEW: Only show confidence if verdict is not UNCERTAIN
+                const confidenceText = result.verdict !== 'UNCERTAIN' ? ` (${result.confidence}%)` : '';
 
                 let flagsHTML = (result.red_flags || []).map(flag => 
                     `<span class="inline-block bg-${resultColor}-900/50 text-${resultColor}-300 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full border border-${resultColor}-700">${flag}</span>`
@@ -243,7 +245,7 @@
 
                 resultsContent.innerHTML = `
                     <div class="bg-${resultColor}-500/10 border border-${resultColor}-500/30 rounded-lg p-6 text-left">
-                        <h2 class="text-2xl font-bold text-${resultColor}-400">Phán quyết: ${verdictText} (${result.confidence}%)</h2>
+                        <h2 class="text-2xl font-bold text-${resultColor}-400">Phán quyết: ${verdictText}${confidenceText}</h2>
                         <p class="mt-3 text-gray-300">${result.reason}</p>
                         ${flagsHTML ? `
                         <div class="mt-4">
