@@ -50,35 +50,15 @@
                             <textarea id="text-input" name="text" rows="4" class="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="VD: Kính gửi quý khách, tài khoản của quý khách đã bị tạm khóa..."></textarea>
                         </div>
 
-                        <!-- Separator -->
-                        <div class="relative">
-                            <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                                <div class="w-full border-t border-gray-600"></div>
-                            </div>
-                            <div class="relative flex justify-center">
-                                <span class="bg-gray-800/50 px-2 text-sm text-gray-400">hoặc</span>
-                            </div>
-                        </div>
-
                         <!-- 2. URL Input Section -->
                         <div>
                             <label for="url-input" class="block text-sm font-medium text-gray-300 mb-2">Nhập một liên kết đáng ngờ</label>
                             <input type="url" id="url-input" name="url" class="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="https://www.vi-du-ngan-hang-dang-nhap.com">
                         </div>
 
-                        <!-- Separator -->
-                        <div class="relative">
-                            <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                                <div class="w-full border-t border-gray-600"></div>
-                            </div>
-                            <div class="relative flex justify-center">
-                                <span class="bg-gray-800/50 px-2 text-sm text-gray-400">hoặc</span>
-                            </div>
-                        </div>
-
                         <!-- 3. Image Upload Section -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">Tải lên ảnh chụp màn hình</label>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Tải lên ảnh chụp màn hình (có thể chọn nhiều ảnh)</label>
                             <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-500 px-6 py-10" id="drop-zone">
                                 <div class="text-center">
                                     <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
@@ -86,19 +66,24 @@
                                     </svg>
                                     <div class="mt-4 flex text-sm leading-6 text-gray-400">
                                         <label for="file-upload" class="relative font-semibold text-blue-400 hover:text-blue-500 transition">
-                                            <span>Tải lên một tệp</span>
-                                            <input id="file-upload" name="file" type="file" class="sr-only" accept="image/png, image/jpeg, image/webp">
+                                            <span>Tải lên tệp</span>
+                                            <input id="file-upload" name="file" type="file" class="sr-only" accept="image/png, image/jpeg, image/webp" multiple>
                                         </label>
                                         <p class="pl-1">hoặc kéo và thả</p>
                                     </div>
-                                    <p class="text-xs leading-5 text-gray-500" id="file-name">PNG, JPG, WEBP tối đa 10MB</p>
+                                    <p class="text-xs leading-5 text-gray-500" id="file-name-display">PNG, JPG, WEBP tối đa 10MB</p>
                                 </div>
                             </div>
                             <!-- Image preview area -->
-                            <div class="mt-4" id="image-preview-container" style="display: none;">
-                                <img id="image-preview" src="#" alt="Xem trước hình ảnh" class="max-h-60 w-auto mx-auto rounded-lg shadow-md"/>
-                            </div>
+                            <div id="image-preview-container" class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
                         </div>
+                        
+                        <!-- 4. Additional Context Section -->
+                        <div>
+                            <label for="context-input" class="block text-sm font-medium text-gray-300 mb-2">Bối cảnh bổ sung (Không bắt buộc)</label>
+                            <textarea id="context-input" name="context" rows="3" class="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="VD: Một người bạn cũ đột nhiên nhắn tin cho tôi và gửi cái này..."></textarea>
+                        </div>
+
                     </div>
 
                     <!-- Submit Button -->
@@ -128,44 +113,67 @@
     </div>
 
     <script>
-        // --- This is the JavaScript part that makes the page interactive ---
-
-        // Get references to the HTML elements we'll need to work with
         const form = document.getElementById('analysis-form');
         const textInputEl = document.getElementById('text-input');
         const urlInputEl = document.getElementById('url-input');
+        const contextInputEl = document.getElementById('context-input');
         const fileInput = document.getElementById('file-upload');
-        const fileNameDisplay = document.getElementById('file-name');
+        const fileNameDisplay = document.getElementById('file-name-display');
         const imagePreviewContainer = document.getElementById('image-preview-container');
-        const imagePreview = document.getElementById('image-preview');
         const dropZone = document.getElementById('drop-zone');
         const resultsSection = document.getElementById('results-section');
         const loadingSpinner = document.getElementById('loading-spinner');
         const resultsContent = document.getElementById('results-content');
         const submitButton = document.getElementById('submit-button');
 
-        let uploadedFile = null;
+        let uploadedFiles = [];
 
-        // --- File Upload and Preview Logic ---
+        function renderPreviews() {
+            imagePreviewContainer.innerHTML = '';
+            if (uploadedFiles.length === 0) {
+                fileNameDisplay.textContent = 'PNG, JPG, WEBP tối đa 10MB';
+                return;
+            }
 
-        function handleFile(file) {
-            if (file && file.type.startsWith('image/')) {
-                uploadedFile = file; // Store the file object
-                fileNameDisplay.textContent = file.name;
+            fileNameDisplay.textContent = `${uploadedFiles.length} tệp đã chọn`;
+
+            uploadedFiles.forEach((file, index) => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    imagePreview.src = e.target.result;
-                    imagePreviewContainer.style.display = 'block';
+                    const previewWrapper = document.createElement('div');
+                    previewWrapper.className = 'relative group';
+                    
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'h-24 w-full object-cover rounded-lg shadow-md';
+                    
+                    const removeBtn = document.createElement('button');
+                    removeBtn.innerHTML = '&times;';
+                    removeBtn.className = 'absolute top-1 right-1 bg-red-600 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity';
+                    removeBtn.onclick = (event) => {
+                        event.preventDefault();
+                        uploadedFiles.splice(index, 1);
+                        renderPreviews();
+                    };
+                    
+                    previewWrapper.appendChild(img);
+                    previewWrapper.appendChild(removeBtn);
+                    imagePreviewContainer.appendChild(previewWrapper);
                 }
                 reader.readAsDataURL(file);
-            } else {
-                uploadedFile = null;
-                fileNameDisplay.textContent = 'Vui lòng tải lên một tệp hình ảnh hợp lệ.';
-                imagePreviewContainer.style.display = 'none';
-            }
+            });
         }
 
-        fileInput.addEventListener('change', (event) => handleFile(event.target.files[0]));
+        function handleFiles(files) {
+            for (const file of files) {
+                if (file.type.startsWith('image/')) {
+                    uploadedFiles.push(file);
+                }
+            }
+            renderPreviews();
+        }
+
+        fileInput.addEventListener('change', (event) => handleFiles(event.target.files));
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
             dropZone.classList.add('border-blue-500', 'bg-gray-700');
@@ -174,18 +182,15 @@
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
             dropZone.classList.remove('border-blue-500', 'bg-gray-700');
-            handleFile(e.dataTransfer.files[0]);
+            handleFiles(e.dataTransfer.files);
         });
         
-        // Helper function to convert a file to a Base64 string
         const toBase64 = file => new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = () => resolve(reader.result);
             reader.onerror = reject;
         });
-
-        // --- Form Submission Logic ---
 
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
@@ -197,33 +202,23 @@
             submitButton.textContent = 'Đang phân tích...';
 
             try {
-                // 1. Prepare the data payload
                 const text = textInputEl.value;
                 const url = urlInputEl.value;
-                let imageBase64 = null;
-
-                if (uploadedFile) {
-                    imageBase64 = await toBase64(uploadedFile);
-                }
+                const userContext = contextInputEl.value;
                 
-                const payload = { text, url, imageBase64 };
+                const imageBase64Array = await Promise.all(uploadedFiles.map(file => toBase64(file)));
 
-                // 2. Send the data to our backend API
+                const payload = { text, url, userContext, imageBase64Array };
+
                 const response = await fetch('/api/analyze', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload),
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
                 const result = await response.json();
-
-                // 3. Display the results from the backend
                 loadingSpinner.style.display = 'none';
 
                 let resultColor = 'yellow';
@@ -236,9 +231,7 @@
                     verdictText = 'KHÔNG PHẢI LỪA ĐẢO';
                 }
 
-                // NEW: Only show confidence if verdict is not UNCERTAIN
                 const confidenceText = result.verdict !== 'UNCERTAIN' ? ` (${result.confidence}%)` : '';
-
                 let flagsHTML = (result.red_flags || []).map(flag => 
                     `<span class="inline-block bg-${resultColor}-900/50 text-${resultColor}-300 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full border border-${resultColor}-700">${flag}</span>`
                 ).join('');
@@ -258,13 +251,11 @@
                         </div>
                     </div>
                 `;
-
             } catch (error) {
                 console.error('Submission error:', error);
                 loadingSpinner.style.display = 'none';
                 resultsContent.innerHTML = `<div class="text-red-400">Không thể phân tích. Vui lòng thử lại.</div>`;
             } finally {
-                // Re-enable the button
                 submitButton.disabled = false;
                 submitButton.textContent = 'Phân tích';
             }
