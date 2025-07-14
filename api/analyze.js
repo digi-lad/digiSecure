@@ -107,7 +107,6 @@ export default async function handler(req, res) {
                     const html = await response.text();
                     const $ = cheerio.load(html);
                     
-                    // Get visible text
                     $('script, style, noscript, svg').remove();
                     const bodyText = $('body').text().replace(/\s\s+/g, ' ').trim();
                     if (bodyText) promptParts.push(`Website Visible Text Snippet: "${bodyText.substring(0, 2000)}"`);
@@ -136,10 +135,21 @@ export default async function handler(req, res) {
 
         const fullPrompt = promptParts.join('\n\n');
 
+        console.log("Sending prompt to Gemini...");
         const result = await model.generateContent([fullPrompt, ...imageParts], { safetySettings });
-        const aiResponse = result.response.candidates[0].content.parts[0].text;
+        const aiResponseText = result.response.candidates[0].content.parts[0].text;
         
-        res.status(200).json(JSON.parse(aiResponse));
+        // **IMPROVEMENT**: Safely parse the JSON response.
+        let parsedResponse;
+        try {
+            parsedResponse = JSON.parse(aiResponseText);
+        } catch (parseError) {
+            console.error("Failed to parse JSON response from AI:", aiResponseText);
+            throw new Error("AI returned an invalid format."); // This will be caught by the outer catch block.
+        }
+        
+        console.log("Successfully received and parsed response from Gemini.");
+        res.status(200).json(parsedResponse);
 
     } catch (error) {
         console.error('Error in analysis function:', error);
