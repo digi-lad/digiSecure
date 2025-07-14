@@ -1,0 +1,14 @@
+{
+  "name": "scam-analyzer-ai",
+  "version": "1.0.0",
+  "description": "An AI-powered scam analyzer.",
+  "main": "index.html",
+  "scripts": {
+    "start": "echo 'No start script defined, this is a static site with serverless functions.'"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.11.3"
+  },
+  "author": "",
+  "license": "MIT"
+}
