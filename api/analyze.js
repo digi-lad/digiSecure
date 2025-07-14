@@ -13,7 +13,7 @@ import * as cheerio from 'cheerio'; // Library to parse HTML from URLs
 // Initialize the AI model
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ 
-    model: "gemini-2.5-flash-lite-preview-06-17",
+    model: "gemini-1.5-flash",
     generationConfig: {
         responseMimeType: "application/json",
         temperature: 0.2,
@@ -139,13 +139,19 @@ export default async function handler(req, res) {
         const result = await model.generateContent([fullPrompt, ...imageParts], { safetySettings });
         const aiResponseText = result.response.candidates[0].content.parts[0].text;
         
-        // **IMPROVEMENT**: Safely parse the JSON response.
+        // **IMPROVEMENT V2**: Safely find and parse the JSON object from the response.
         let parsedResponse;
         try {
-            parsedResponse = JSON.parse(aiResponseText);
+            const startIndex = aiResponseText.indexOf('{');
+            const endIndex = aiResponseText.lastIndexOf('}');
+            if (startIndex === -1 || endIndex === -1) {
+                throw new Error("No JSON object found in the AI response.");
+            }
+            const jsonString = aiResponseText.substring(startIndex, endIndex + 1);
+            parsedResponse = JSON.parse(jsonString);
         } catch (parseError) {
             console.error("Failed to parse JSON response from AI:", aiResponseText);
-            throw new Error("AI returned an invalid format."); // This will be caught by the outer catch block.
+            throw new Error("AI returned an invalid format.");
         }
         
         console.log("Successfully received and parsed response from Gemini.");
