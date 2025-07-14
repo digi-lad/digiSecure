@@ -85,17 +85,21 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: 'No content provided for analysis.' });
         }
 
-        // --- Construct the Prompt for the AI (now more specific and in Vietnamese) ---
+        // --- Construct the Prompt for the AI (in English for better accuracy, requesting Vietnamese output) ---
         const promptParts = [
-            'Bạn là một chuyên gia phân tích lừa đảo tài chính và an ninh mạng. Nhiệm vụ của bạn là phân tích thông tin do người dùng cung cấp để tìm dấu hiệu lừa đảo qua mạng như phishing, lừa đảo việc làm, lừa đảo đầu tư, hoặc đánh cắp thông tin cá nhân. Hãy tập trung vào các yếu tố như: lời lẽ hối thúc, yêu cầu cung cấp thông tin nhạy cảm, các đường link đáng ngờ, ngữ pháp và chính tả kém, và các lời đề nghị quá tốt để có thể là sự thật. TUYỆT ĐỐI KHÔNG đưa ra lời khuyên về mối quan hệ cá nhân hay phân tích cảm xúc, trừ khi nó liên quan trực tiếp đến một vụ lừa đảo tài chính (ví dụ: lừa đảo tình cảm). Toàn bộ phản hồi của bạn phải bằng tiếng Việt và tuân thủ nghiêm ngặt định dạng JSON đã được yêu cầu.',
-            'Đây là thông tin cần phân tích:'
+            `You are an expert financial and cybersecurity scam analyst. Your task is to analyze information provided by a user to find signs of online scams like phishing, job scams, investment fraud, or information theft. Focus on elements like: urgent language, requests for sensitive information, suspicious links, poor grammar and spelling, and offers that are too good to be true.`,
+            `IMPORTANT: Do NOT give advice on personal relationships or emotional analysis, unless it is directly part of a financial scam (e.g., a romance scam asking for money).`,
+            `CRITICAL: If the provided text or image is ambiguous or lacks clear scam indicators, you MUST lower your confidence score significantly. If there is not enough context to make a judgment, you MUST use the "UNCERTAIN" verdict. Do not be overconfident.`,
+            `Your entire final response MUST be in Vietnamese and strictly follow the required JSON format.`,
+            '---',
+            'Here is the information to analyze:'
         ];
 
         if (text) {
-            promptParts.push(`Nội dung văn bản: "${text}"`);
+            promptParts.push(`Pasted Text: "${text}"`);
         }
         if (url) {
-            promptParts.push(`Đường dẫn URL: "${url}"`);
+            promptParts.push(`URL provided: "${url}"`);
         }
         
         const imageParts = [];
@@ -103,7 +107,7 @@ export default async function handler(req, res) {
             // Assuming the frontend sends a data URL like "data:image/png;base64,..."
             const mimeType = imageBase64.substring(imageBase64.indexOf(":") + 1, imageBase64.indexOf(";"));
             imageParts.push(fileToGenerativePart(imageBase64, mimeType));
-            promptParts.push('Một ảnh chụp màn hình cũng được đính kèm để phân tích.');
+            promptParts.push('A screenshot is also attached for analysis.');
         }
 
         const fullPrompt = promptParts.join('\n\n');

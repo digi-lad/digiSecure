@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scam Analyzer AI</title>
+    <title>AI Phân Tích Lừa Đảo</title>
     <!-- We are using Tailwind CSS for styling. It's a utility-first CSS framework that makes it easy to build beautiful, custom designs. -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- We'll use the Inter font for a clean, modern look. -->
@@ -35,8 +35,8 @@
         <div class="w-full max-w-2xl mx-auto">
             <!-- Header Section -->
             <header class="text-center mb-8">
-                <h1 class="text-4xl sm:text-5xl font-bold text-white">Is This a Scam?</h1>
-                <p class="mt-3 text-lg text-gray-400">Let our AI analyze messages, links, and screenshots for you.</p>
+                <h1 class="text-4xl sm:text-5xl font-bold text-white">Scam or not?</h1>
+                <p class="mt-3 text-lg text-gray-400">Để AI của chúng tôi phân tích tin nhắn, liên kết và ảnh chụp màn hình cho bạn.</p>
             </header>
 
             <!-- Main Analysis Form -->
@@ -46,8 +46,8 @@
                         
                         <!-- 1. Text Input Section -->
                         <div>
-                            <label for="text-input" class="block text-sm font-medium text-gray-300 mb-2">Paste suspicious text</label>
-                            <textarea id="text-input" name="text" rows="4" class="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="e.g., Dear customer, your account has been suspended..."></textarea>
+                            <label for="text-input" class="block text-sm font-medium text-gray-300 mb-2">Dán văn bản đáng ngờ</label>
+                            <textarea id="text-input" name="text" rows="4" class="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="VD: Kính gửi quý khách, tài khoản của quý khách đã bị tạm khóa..."></textarea>
                         </div>
 
                         <!-- Separator -->
@@ -56,14 +56,14 @@
                                 <div class="w-full border-t border-gray-600"></div>
                             </div>
                             <div class="relative flex justify-center">
-                                <span class="bg-gray-800/50 px-2 text-sm text-gray-400">or</span>
+                                <span class="bg-gray-800/50 px-2 text-sm text-gray-400">hoặc</span>
                             </div>
                         </div>
 
                         <!-- 2. URL Input Section -->
                         <div>
-                            <label for="url-input" class="block text-sm font-medium text-gray-300 mb-2">Enter a suspicious link</label>
-                            <input type="url" id="url-input" name="url" class="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="https://www.example-bank-login.com">
+                            <label for="url-input" class="block text-sm font-medium text-gray-300 mb-2">Nhập một liên kết đáng ngờ</label>
+                            <input type="url" id="url-input" name="url" class="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="https://www.vi-du-ngan-hang-dang-nhap.com">
                         </div>
 
                         <!-- Separator -->
@@ -72,13 +72,13 @@
                                 <div class="w-full border-t border-gray-600"></div>
                             </div>
                             <div class="relative flex justify-center">
-                                <span class="bg-gray-800/50 px-2 text-sm text-gray-400">or</span>
+                                <span class="bg-gray-800/50 px-2 text-sm text-gray-400">hoặc</span>
                             </div>
                         </div>
 
                         <!-- 3. Image Upload Section -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">Upload a screenshot</label>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Tải lên ảnh chụp màn hình</label>
                             <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-500 px-6 py-10" id="drop-zone">
                                 <div class="text-center">
                                     <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
@@ -86,17 +86,17 @@
                                     </svg>
                                     <div class="mt-4 flex text-sm leading-6 text-gray-400">
                                         <label for="file-upload" class="relative font-semibold text-blue-400 hover:text-blue-500 transition">
-                                            <span>Upload a file</span>
+                                            <span>Tải lên một tệp</span>
                                             <input id="file-upload" name="file" type="file" class="sr-only" accept="image/png, image/jpeg, image/webp">
                                         </label>
-                                        <p class="pl-1">or drag and drop</p>
+                                        <p class="pl-1">hoặc kéo và thả</p>
                                     </div>
-                                    <p class="text-xs leading-5 text-gray-500" id="file-name">PNG, JPG, WEBP up to 10MB</p>
+                                    <p class="text-xs leading-5 text-gray-500" id="file-name">PNG, JPG, WEBP tối đa 10MB</p>
                                 </div>
                             </div>
                             <!-- Image preview area -->
                             <div class="mt-4" id="image-preview-container" style="display: none;">
-                                <img id="image-preview" src="#" alt="Image preview" class="max-h-60 w-auto mx-auto rounded-lg shadow-md"/>
+                                <img id="image-preview" src="#" alt="Xem trước hình ảnh" class="max-h-60 w-auto mx-auto rounded-lg shadow-md"/>
                             </div>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                     <!-- Submit Button -->
                     <div class="mt-8">
                         <button type="submit" id="submit-button" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:ring-offset-gray-900 transition-transform transform hover:scale-105">
-                            Analyze
+                            Phân tích
                         </button>
                     </div>
                 </form>
@@ -117,7 +117,7 @@
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        <p class="mt-2 text-gray-400">Analyzing...</p>
+                        <p class="mt-2 text-gray-400">Đang phân tích...</p>
                     </div>
                     <!-- The actual results will be injected here by JavaScript -->
                     <div id="results-content"></div>
@@ -160,7 +160,7 @@
                 reader.readAsDataURL(file);
             } else {
                 uploadedFile = null;
-                fileNameDisplay.textContent = 'Please upload a valid image file.';
+                fileNameDisplay.textContent = 'Vui lòng tải lên một tệp hình ảnh hợp lệ.';
                 imagePreviewContainer.style.display = 'none';
             }
         }
@@ -194,7 +194,7 @@
             loadingSpinner.style.display = 'block';
             resultsContent.innerHTML = '';
             submitButton.disabled = true;
-            submitButton.textContent = 'Analyzing...';
+            submitButton.textContent = 'Đang phân tích...';
 
             try {
                 // 1. Prepare the data payload
@@ -226,9 +226,16 @@
                 // 3. Display the results from the backend
                 loadingSpinner.style.display = 'none';
 
-                const isScam = result.verdict.toLowerCase() === 'scam';
-                const resultColor = isScam ? 'red' : 'green';
-                const verdictText = isScam ? 'SCAM' : 'NOT A SCAM';
+                let resultColor = 'yellow';
+                let verdictText = 'Không chắc chắn';
+                if (result.verdict === 'SCAM') {
+                    resultColor = 'red';
+                    verdictText = 'LỪA ĐẢO';
+                } else if (result.verdict === 'NOT A SCAM') {
+                    resultColor = 'green';
+                    verdictText = 'KHÔNG PHẢI LỪA ĐẢO';
+                }
+
 
                 let flagsHTML = (result.red_flags || []).map(flag => 
                     `<span class="inline-block bg-${resultColor}-900/50 text-${resultColor}-300 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full border border-${resultColor}-700">${flag}</span>`
@@ -236,15 +243,15 @@
 
                 resultsContent.innerHTML = `
                     <div class="bg-${resultColor}-500/10 border border-${resultColor}-500/30 rounded-lg p-6 text-left">
-                        <h2 class="text-2xl font-bold text-${resultColor}-400">Verdict: ${verdictText} (${result.confidence}%)</h2>
+                        <h2 class="text-2xl font-bold text-${resultColor}-400">Phán quyết: ${verdictText} (${result.confidence}%)</h2>
                         <p class="mt-3 text-gray-300">${result.reason}</p>
                         ${flagsHTML ? `
                         <div class="mt-4">
-                            <h3 class="font-semibold text-white mb-2">Red Flags Detected:</h3>
+                            <h3 class="font-semibold text-white mb-2">Các dấu hiệu đáng ngờ:</h3>
                             <div class="flex flex-wrap gap-2">${flagsHTML}</div>
                         </div>` : ''}
                         <div class="mt-6 bg-gray-900/50 p-4 rounded-lg">
-                             <h3 class="font-semibold text-blue-400 mb-1">Recommended Action:</h3>
+                             <h3 class="font-semibold text-blue-400 mb-1">Hành động đề xuất:</h3>
                              <p class="text-gray-300">${result.advice}</p>
                         </div>
                     </div>
@@ -253,11 +260,11 @@
             } catch (error) {
                 console.error('Submission error:', error);
                 loadingSpinner.style.display = 'none';
-                resultsContent.innerHTML = `<div class="text-red-400">Failed to get analysis. Please try again.</div>`;
+                resultsContent.innerHTML = `<div class="text-red-400">Không thể phân tích. Vui lòng thử lại.</div>`;
             } finally {
                 // Re-enable the button
                 submitButton.disabled = false;
-                submitButton.textContent = 'Analyze';
+                submitButton.textContent = 'Phân tích';
             }
         });
     </script>
