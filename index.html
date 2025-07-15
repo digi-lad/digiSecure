@@ -276,8 +276,20 @@
                 loadingSpinner.style.display = 'none';
                 resultsContent.innerHTML = `<div class="text-red-400">Không thể phân tích. Vui lòng thử lại.</div>`;
             } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Phân tích';
+                // --- NEW: Cooldown logic ---
+                let countdown = 7;
+                submitButton.textContent = `Vui lòng đợi ${countdown}s`;
+                
+                const interval = setInterval(() => {
+                    countdown--;
+                    if (countdown > 0) {
+                        submitButton.textContent = `Vui lòng đợi ${countdown}s`;
+                    } else {
+                        clearInterval(interval);
+                        submitButton.disabled = false;
+                        submitButton.textContent = 'Phân tích';
+                    }
+                }, 1000);
             }
         });
     </script>
