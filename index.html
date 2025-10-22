@@ -47,7 +47,7 @@
                         <!-- 1. Text Input Section -->
                         <div>
                             <label for="text-input" class="block text-sm font-medium text-gray-300 mb-2">Paste suspicious text</label>
-                            <textarea id="text-input" name="text" rows="4" class="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="VD: Kính gửi quý khách, tài khoản của quý khách đã bị tạm khóa..."></textarea>
+                            <textarea id="text-input" name="text" rows="4" class="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="E.g., Dear customer, your account has been temporarily locked..."></textarea>
                         </div>
 
                         <!-- Separator -->
@@ -63,7 +63,7 @@
                         <!-- 2. URL Input Section -->
                         <div>
                             <label for="url-input" class="block text-sm font-medium text-gray-300 mb-2">Enter a suspicious link</label>
-                            <input type="url" id="url-input" name="url" class="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="https://www.vi-du-ngan-hang-dang-nhap.com">
+                            <input type="url" id="url-input" name="url" class="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="https://www.example-bank-login.com">
                         </div>
 
                         <!-- Separator -->
@@ -101,7 +101,7 @@
                         <!-- 4. Additional Context Section -->
                         <div class="pt-4">
                             <label for="context-input" class="block text-sm font-medium text-gray-300 mb-2">Additional context (Optional)</label>
-                            <textarea id="context-input" name="context" rows="3" class="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="VD: Một người bạn cũ đột nhiên nhắn tin cho tôi và gửi cái này..."></textarea>
+                            <textarea id="context-input" name="context" rows="3" class="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="E.g., An old friend suddenly messaged me this..."></textarea>
                         </div>
 
                     </div>
@@ -258,15 +258,15 @@
 
                 resultsContent.innerHTML = `
                     <div class="bg-${resultColor}-500/10 border border-${resultColor}-500/30 rounded-lg p-6 text-left">
-                        <h2 class="text-2xl font-bold text-${resultColor}-400">Phán quyết: ${verdictText}${confidenceText}</h2>
+                        <h2 class="text-2xl font-bold text-${resultColor}-400">Verdict: ${verdictText}${confidenceText}</h2>
                         <p class="mt-3 text-gray-300">${result.reason}</p>
                         ${flagsHTML ? `
                         <div class="mt-4">
-                            <h3 class="font-semibold text-white mb-2">Các dấu hiệu đáng ngờ:</h3>
+                            <h3 class="font-semibold text-white mb-2">Suspicious Flags:</h3>
                             <div class="flex flex-wrap gap-2">${flagsHTML}</div>
                         </div>` : ''}
                         <div class="mt-6 bg-gray-900/50 p-4 rounded-lg">
-                             <h3 class="font-semibold text-blue-400 mb-1">Hành động đề xuất:</h3>
+                             <h3 class="font-semibold text-blue-400 mb-1">Recommended Action:</h3>
                              <p class="text-gray-300">${result.advice}</p>
                         </div>
                     </div>
