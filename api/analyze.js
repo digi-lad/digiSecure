@@ -22,9 +22,9 @@ const model = genAI.getGenerativeModel({
             properties: {
                 verdict: { type: "STRING", enum: ["SCAM", "NOT A SCAM", "UNCERTAIN"] },
                 confidence: { type: "NUMBER", description: "An integer from 0 to 100." },
-                reason: { type: "STRING", description: "A brief explanation, in Vietnamese." },
-                red_flags: { type: "ARRAY", items: { type: "STRING" }, description: "A list of detected red flags, in Vietnamese." },
-                advice: { type: "STRING", description: "Specific advice for the user, in Vietnamese." }
+                reason: { type: "STRING", description: "A brief explanation, in English." },
+                red_flags: { type: "ARRAY", items: { type: "STRING" }, description: "A list of detected red flags, in English." },
+                advice: { type: "STRING", description: "Specific advice for the user, in English." }
             },
             required: ["verdict", "confidence", "reason", "advice"]
         }
@@ -66,14 +66,14 @@ export default async function handler(req, res) {
             `Your task is to analyze information provided by a user to find signs of online scams like phishing, job scams, investment fraud, or information theft.`,
             `Before providing the final JSON output, you MUST follow these internal analysis steps:
 1.  **Identify Key Elements**: Scan the user's input for specific elements like URLs, phone numbers, names of organizations, and monetary figures.
-2.  **Analyze for Red Flags**: Evaluate the text and HTML based on a checklist of scam indicators: urgent language, offers that are too good to be true, poor grammar/spelling, unexpected subscription fee notifications, requests for sensitive information (especially from banks/services via SMS/email), and suspicious links/contact details (e.g., URLs that don't end in .vn for official Vietnamese organizations).
+2.  **Analyze for Red Flags**: Evaluate the text and HTML based on a checklist of scam indicators: urgent language, offers that are too good to be true, poor grammar/spelling, unexpected subscription fee notifications, requests for sensitive information (especially from banks/services via SMS/email), and suspicious links/contact details (e.g., URLs that don't end in .vn for official English organizations).
 3.  **Analyze Raw HTML (if provided)**: Look for technical red flags in the HTML source. Pay close attention to form \`action\` attributes that point to a different or suspicious domain, and \`<script>\` tags loading code from untrusted sources.
 4.  **Assess Context and Confidence**: Based on the flags found (or not found), determine a verdict (SCAM, NOT A SCAM, UNCERTAIN) and a confidence score **from 0 to 100**. **Confidence below 70 is considered low.**
 5.  **Formulate Response**: Construct the reason and advice based on your findings. The advice should be simple, clear (under 50 words), and actionable for a typical internet user in Vietnam.`,
             `**IMPORTANT:** Do NOT give advice on personal relationships or emotional analysis, unless it is directly part of a financial scam (e.g., a romance scam asking for money).`,
             `**CRITICAL:** If the provided text or image is ambiguous or lacks clear scam indicators, you MUST lower your confidence score significantly and use the "UNCERTAIN" verdict. If the verdict is UNCERTAIN, the 'reason' field must explain what specific information is missing.`,
             `**IF the input is invalid or incomplete (e.g., only an image without readable content, corrupted HTML, etc.), you must return verdict: "UNCERTAIN", confidence: 0, and an appropriate reason.**`,
-            `Your entire final response MUST be in Vietnamese and strictly follow the required JSON format.`,
+            `Your entire final response MUST be in English and strictly follow the required JSON format.`,
             '---',
             'EXAMPLE 1 (Clear Scam):',
             'User Input: `Pasted Text: "Ban da trung thuong giai dac biet 100.000.000d tu su kien tri an khach hang. Vui long truy cap vao link nay de xac nhan thong tin ca nhan va nhan giai: http://nhangiaithuong-vn-2025.xyz"`',
