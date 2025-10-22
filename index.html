@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Phân Tích Lừa Đảo</title>
+    <title>digiSecure</title>
     <!-- We are using Tailwind CSS for styling. It's a utility-first CSS framework that makes it easy to build beautiful, custom designs. -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- We'll use the Inter font for a clean, modern look. -->
@@ -35,8 +35,8 @@
         <div class="w-full max-w-2xl mx-auto">
             <!-- Header Section -->
             <header class="text-center mb-8">
-                <h1 class="text-4xl sm:text-5xl font-bold text-white">Có phải lừa đảo không?</h1>
-                <p class="mt-3 text-lg text-gray-400">Để AI của chúng tôi phân tích tin nhắn, liên kết và ảnh chụp màn hình cho bạn.</p>
+                <h1 class="text-4xl sm:text-5xl font-bold text-white">Is this a scam?</h1>
+                <p class="mt-3 text-lg text-gray-400">Let our AI analyze messages, links, and screenshots for you.</p>
             </header>
 
             <!-- Main Analysis Form -->
@@ -46,7 +46,7 @@
                         
                         <!-- 1. Text Input Section -->
                         <div>
-                            <label for="text-input" class="block text-sm font-medium text-gray-300 mb-2">Dán văn bản đáng ngờ</label>
+                            <label for="text-input" class="block text-sm font-medium text-gray-300 mb-2">Paste suspicious text</label>
                             <textarea id="text-input" name="text" rows="4" class="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="VD: Kính gửi quý khách, tài khoản của quý khách đã bị tạm khóa..."></textarea>
                         </div>
 
@@ -56,13 +56,13 @@
                                 <div class="w-full border-t border-gray-600"></div>
                             </div>
                             <div class="relative flex justify-center">
-                                <span class="bg-gray-800 px-3 text-base font-medium text-gray-400">hoặc</span>
+                                <span class="bg-gray-800 px-3 text-base font-medium text-gray-400">or</span>
                             </div>
                         </div>
 
                         <!-- 2. URL Input Section -->
                         <div>
-                            <label for="url-input" class="block text-sm font-medium text-gray-300 mb-2">Nhập một liên kết đáng ngờ</label>
+                            <label for="url-input" class="block text-sm font-medium text-gray-300 mb-2">Enter a suspicious link</label>
                             <input type="url" id="url-input" name="url" class="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="https://www.vi-du-ngan-hang-dang-nhap.com">
                         </div>
 
@@ -72,13 +72,13 @@
                                 <div class="w-full border-t border-gray-600"></div>
                             </div>
                             <div class="relative flex justify-center">
-                                <span class="bg-gray-800 px-3 text-base font-medium text-gray-400">hoặc</span>
+                                <span class="bg-gray-800 px-3 text-base font-medium text-gray-400">or</span>
                             </div>
                         </div>
 
                         <!-- 3. Image Upload Section -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">Tải lên ảnh chụp màn hình (có thể chọn nhiều ảnh)</label>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Upload screenshots (multiple allowed)</label>
                             <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-500 px-6 py-10" id="drop-zone">
                                 <div class="text-center">
                                     <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
@@ -86,12 +86,12 @@
                                     </svg>
                                     <div class="mt-4 flex text-sm leading-6 text-gray-400">
                                         <label for="file-upload" class="relative font-semibold text-blue-400 hover:text-blue-500 transition">
-                                            <span>Tải lên tệp</span>
+                                            <span>Upload a file</span>
                                             <input id="file-upload" name="file" type="file" class="sr-only" accept="image/png, image/jpeg, image/webp" multiple>
                                         </label>
-                                        <p class="pl-1">hoặc kéo và thả</p>
+                                        <p class="pl-1">or drag and drop</p>
                                     </div>
-                                    <p class="text-xs leading-5 text-gray-500" id="file-name-display">PNG, JPG, WEBP tối đa 10MB</p>
+                                    <p class="text-xs leading-5 text-gray-500" id="file-name-display">PNG, JPG, WEBP up to 10MB</p>
                                 </div>
                             </div>
                             <!-- Image preview area -->
@@ -100,7 +100,7 @@
                         
                         <!-- 4. Additional Context Section -->
                         <div class="pt-4">
-                            <label for="context-input" class="block text-sm font-medium text-gray-300 mb-2">Bối cảnh bổ sung (Không bắt buộc)</label>
+                            <label for="context-input" class="block text-sm font-medium text-gray-300 mb-2">Additional context (Optional)</label>
                             <textarea id="context-input" name="context" rows="3" class="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="VD: Một người bạn cũ đột nhiên nhắn tin cho tôi và gửi cái này..."></textarea>
                         </div>
 
@@ -109,7 +109,7 @@
                     <!-- Submit Button -->
                     <div class="mt-8">
                         <button type="submit" id="submit-button" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:ring-offset-gray-900 transition-transform transform hover:scale-105">
-                            Phân tích
+                            Analyze
                         </button>
                     </div>
                 </form>
@@ -122,7 +122,7 @@
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        <p class="mt-2 text-gray-400">Đang phân tích...</p>
+                        <p class="mt-2 text-gray-400">Analyzing...</p>
                     </div>
                     <!-- The actual results will be injected here by JavaScript -->
                     <div id="results-content"></div>
@@ -242,13 +242,13 @@
                 loadingSpinner.style.display = 'none';
 
                 let resultColor = 'yellow';
-                let verdictText = 'Không chắc chắn';
+                let verdictText = 'Uncertain';
                 if (result.verdict === 'SCAM') {
                     resultColor = 'red';
-                    verdictText = 'LỪA ĐẢO';
+                    verdictText = 'SCAM';
                 } else if (result.verdict === 'NOT A SCAM') {
                     resultColor = 'green';
-                    verdictText = 'KHÔNG PHẢI LỪA ĐẢO';
+                    verdictText = 'NOT A SCAM';
                 }
 
                 const confidenceText = result.verdict !== 'UNCERTAIN' ? ` (${result.confidence}%)` : '';
@@ -274,20 +274,20 @@
             } catch (error) {
                 console.error('Submission error:', error);
                 loadingSpinner.style.display = 'none';
-                resultsContent.innerHTML = `<div class="text-red-400">Không thể phân tích. Vui lòng thử lại.</div>`;
+                resultsContent.innerHTML = `<div class="text-red-400">Could not analyze. Please try again.</div>`;
             } finally {
                 // --- NEW: Cooldown logic ---
                 let countdown = 7;
-                submitButton.textContent = `Vui lòng đợi ${countdown}s`;
+                submitButton.textContent = `Please wait ${countdown}s`;
                 
                 const interval = setInterval(() => {
                     countdown--;
                     if (countdown > 0) {
-                        submitButton.textContent = `Vui lòng đợi ${countdown}s`;
+                        submitButton.textContent = `Please wait ${countdown}s`;
                     } else {
                         clearInterval(interval);
                         submitButton.disabled = false;
-                        submitButton.textContent = 'Phân tích';
+                        submitButton.textContent = 'Analyze';
                     }
                 }, 1000);
             }
